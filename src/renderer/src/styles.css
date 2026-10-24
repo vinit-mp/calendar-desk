@@ -13,6 +13,11 @@
   --weekend: rgba(21, 24, 31, 0.035);
   --danger: #c62828;
 
+  /* Event status colours: upcoming, end time passed, ticked off. */
+  --status-upcoming: #e8a600;
+  --status-overdue: #d93025;
+  --status-done: #1e8e3e;
+
   --titlebar-h: 44px;
   --editor-w: 400px;
   --font: 'Segoe UI Variable Text', 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -34,6 +39,9 @@
     --today: #1f2640;
     --weekend: rgba(232, 234, 239, 0.035);
     --danger: #ff7a7a;
+    --status-upcoming: #f6bf26;
+    --status-overdue: #f28b82;
+    --status-done: #81c995;
   }
 }
 
@@ -628,7 +636,8 @@ textarea {
 }
 .tghost--pending {
   border-style: dashed;
-  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border-color: var(--status-upcoming);
+  background: color-mix(in srgb, var(--status-upcoming) 14%, transparent);
 }
 
 .tnow {
@@ -945,6 +954,10 @@ textarea {
 .event__title {
   font-weight: 600;
 }
+.event__overdue {
+  color: var(--status-overdue);
+  font-weight: 600;
+}
 .event:hover {
   background: color-mix(in srgb, var(--c) 24%, var(--surface));
 }
@@ -973,7 +986,7 @@ textarea {
 }
 .check.is-done {
   background: var(--c, var(--accent));
-  color: #fff;
+  color: var(--surface);
 }
 .tev.is-done,
 .chip.is-done,
@@ -1061,45 +1074,6 @@ textarea {
 .editor__toggles {
   display: flex;
   gap: 20px;
-}
-
-.swatches {
-  border: 0;
-  padding: 0;
-  margin-inline: 0;
-}
-.swatches legend {
-  padding: 0;
-  margin-bottom: 6px;
-  font-size: 12.5px;
-  color: var(--muted);
-}
-.swatches__row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.swatch {
-  position: relative;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--c);
-  cursor: pointer;
-}
-.swatch input {
-  position: absolute;
-  inset: 0;
-  margin: 0;
-  opacity: 0;
-  cursor: pointer;
-}
-.swatch:has(input:checked) {
-  box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--c);
-}
-.swatch:has(input:focus-visible) {
-  outline: 2px solid var(--accent);
-  outline-offset: 4px;
 }
 
 .field {

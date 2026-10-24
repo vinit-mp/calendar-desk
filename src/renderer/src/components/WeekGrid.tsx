@@ -1,7 +1,8 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type PointerEvent as ReactPointerEvent } from 'react'
+import { useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type PointerEvent as ReactPointerEvent } from 'react'
 import type { CalendarEvent, DayNote, EventInput } from '../../../shared/types'
 import { addDays, dateKey, fmtDayName, fmtTime, isSameDay, startOfDay } from '../lib/dates'
-import { eventColor } from '../lib/colors'
+import { STATUS_LABEL, eventStatus, statusColor } from '../lib/colors'
+import { useNow } from '../lib/useNow'
 import DoneCheck from './DoneCheck'
 
 export const HOUR_PX = 48
@@ -128,12 +129,7 @@ export default function WeekGrid({ weekStart, events, notes, loading, selectedId
   const scrollRef = useRef<HTMLDivElement>(null)
   const downAt = useRef({ x: 0, y: 0 })
   const [drag, setDrag] = useState<Drag | null>(null)
-  const [now, setNow] = useState(() => new Date())
-
-  useEffect(() => {
-    const t = setInterval(() => setNow(new Date()), 60_000)
-    return () => clearInterval(t)
-  }, [])
+  const now = useNow()
 
   // First paint: scroll to a sensible hour instead of midnight.
   const scrolled = useRef(false)
@@ -312,7 +308,8 @@ export default function WeekGrid({ weekStart, events, notes, loading, selectedId
               <div
                 key={event.id}
                 className={`chip${event.id === selectedId ? ' is-selected' : ''}${event.done ? ' is-done' : ''}`}
-                style={{ '--c': eventColor(event.colorId) } as CSSProperties}
+                style={{ '--c': statusColor(event, now) } as CSSProperties}
+                title={`${event.summary} (${STATUS_LABEL[eventStatus(event, now)]})`}
               >
                 <DoneCheck event={event} onToggle={onToggleDone} />
                 <button type="button" className="chip__title" onClick={() => onSelect(event)}>
@@ -364,9 +361,9 @@ export default function WeekGrid({ weekStart, events, notes, loading, selectedId
                         height,
                         left: `calc(${(p.col / p.cols) * 100}% + 2px)`,
                         width: `calc(${100 / p.cols}% - 4px)`,
-                        '--c': eventColor(p.event.colorId)
+                        '--c': statusColor(p.event, now)
                       } as CSSProperties}
-                      title={`${p.event.summary}\n${fmtTime(p.event.start)} – ${fmtTime(p.event.end)}`}
+                      title={`${p.event.summary}\n${fmtTime(p.event.start)} – ${fmtTime(p.event.end)}\n${STATUS_LABEL[eventStatus(p.event, now)]}`}
                     >
                       <span className="tev__top">
                         <DoneCheck event={p.event} onToggle={onToggleDone} />

@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react'
 import type { CalendarEvent, DayNote } from '../../../shared/types'
 import { dateKey, fmtDayLong, fmtEventTime, fmtSavedAt, isSameDay } from '../lib/dates'
-import { eventColor } from '../lib/colors'
+import { eventStatus, statusColor } from '../lib/colors'
+import { useNow } from '../lib/useNow'
 import DoneCheck from './DoneCheck'
 
 interface Props {
@@ -22,6 +23,7 @@ const SAVE_DELAY = 700
 
 export default function DayPanel({ day, events, note, onSaveNote, onSelect, onToggleDone, onCreate, onOpenWeek, onClose, onReveal }: Props): React.JSX.Element {
   const key = dateKey(day)
+  const now = useNow()
   const [text, setText] = useState(note?.text ?? '')
   const [status, setStatus] = useState<Status>('idle')
   const [savedAt, setSavedAt] = useState<string | undefined>(note?.updatedAt)
@@ -116,10 +118,13 @@ export default function DayPanel({ day, events, note, onSaveNote, onSelect, onTo
           {events.length > 0 && `, ${events.filter((e) => e.done).length} done`}
         </h3>
         {events.map((e) => (
-          <div key={e.id} className={`event${e.allDay ? ' event--allday' : ''}${e.done ? ' is-done' : ''}`} style={{ '--c': eventColor(e.colorId) } as CSSProperties}>
+          <div key={e.id} className={`event${e.allDay ? ' event--allday' : ''}${e.done ? ' is-done' : ''}`} style={{ '--c': statusColor(e, now) } as CSSProperties}>
             <DoneCheck event={e} onToggle={onToggleDone} />
             <button type="button" className="event__body" onClick={() => onSelect(e)}>
-              <span className="event__time">{fmtEventTime(e)}</span>
+              <span className="event__time">
+                {fmtEventTime(e)}
+                {eventStatus(e, now) === 'overdue' && <span className="event__overdue"> · Overdue</span>}
+              </span>
               <span className="event__title">{e.summary}</span>
               {e.location && <span className="event__where">{e.location}</span>}
             </button>

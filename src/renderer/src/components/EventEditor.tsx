@@ -1,7 +1,6 @@
-import { useState, type CSSProperties, type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import type { CalendarEvent, EventInput } from '../../../shared/types'
 import { addDays, dateKey, fromLocalInput, parseDateKey, toLocalInput } from '../lib/dates'
-import { EVENT_COLORS } from '../lib/colors'
 
 export type EditorState = { mode: 'create'; draft: EventInput } | { mode: 'edit'; event: CalendarEvent }
 
@@ -24,7 +23,8 @@ interface Form {
   end: string
   location: string
   description: string
-  /** '' means the calendar's default colour. */
+  /** Google's own colour, not editable here (the app colours by status);
+   *  carried through so saving doesn't wipe a colour set in Google Calendar. */
   colorId: string
   done: boolean
 }
@@ -165,16 +165,6 @@ export default function EventEditor({ state, busy, onClose, onSave, onDelete, on
           <label htmlFor="ev-end">Ends</label>
           <input id="ev-end" type={inputType} value={form.end} onChange={(e) => patch({ end: e.target.value })} disabled={busy} required />
         </div>
-        <fieldset className="field swatches" disabled={busy}>
-          <legend>Colour</legend>
-          <div className="swatches__row">
-            {[['', { name: 'Calendar default', hex: 'var(--accent)' }] as const, ...Object.entries(EVENT_COLORS)].map(([id, { name, hex }]) => (
-              <label key={id || 'default'} className="swatch" style={{ '--c': hex } as CSSProperties} title={name}>
-                <input type="radio" name="ev-color" value={id} checked={form.colorId === id} onChange={() => patch({ colorId: id })} aria-label={name} />
-              </label>
-            ))}
-          </div>
-        </fieldset>
         <div className="field">
           <label htmlFor="ev-where">Location</label>
           <input id="ev-where" type="text" value={form.location} onChange={(e) => patch({ location: e.target.value })} disabled={busy} placeholder="Optional" />

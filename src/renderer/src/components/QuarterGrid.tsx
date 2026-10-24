@@ -2,7 +2,8 @@ import { useMemo, type CSSProperties } from 'react'
 import type { CalendarEvent, DayNote } from '../../../shared/types'
 import { addDays, addMonths, dateKey, daysInMonth, fmtMonthName, isSameDay } from '../lib/dates'
 import { groupEventsByDay } from '../lib/events'
-import { eventColor } from '../lib/colors'
+import { STATUS_LABEL, eventStatus, statusColor } from '../lib/colors'
+import { useNow } from '../lib/useNow'
 
 interface Props {
   quarterStart: Date
@@ -17,7 +18,7 @@ const MAX_BARS = 3
 const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
 export default function QuarterGrid({ quarterStart, events, notes, loading, openDay, onOpenDay }: Props): React.JSX.Element {
-  const today = new Date()
+  const today = useNow()
   const months = useMemo(() => [0, 1, 2].map((i) => addMonths(quarterStart, i)), [quarterStart])
   const byDay = useMemo(() => {
     const end = addMonths(quarterStart, 3)
@@ -63,7 +64,7 @@ export default function QuarterGrid({ quarterStart, events, notes, loading, open
                     {list.length > 0 && (
                       <span className="cell__bars">
                         {list.slice(0, MAX_BARS).map((e) => (
-                          <i key={e.id} className={e.done ? 'is-done' : undefined} style={{ '--c': eventColor(e.colorId) } as CSSProperties} title={e.done ? `${e.summary} (done)` : e.summary} />
+                          <i key={e.id} className={e.done ? 'is-done' : undefined} style={{ '--c': statusColor(e, today) } as CSSProperties} title={`${e.summary} (${STATUS_LABEL[eventStatus(e, today)]})`} />
                         ))}
                       </span>
                     )}

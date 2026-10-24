@@ -12,7 +12,7 @@ See your week or your whole quarter at a glance, drag events into place, tick th
 ![Vite](https://img.shields.io/badge/electron--vite-6-646CFF?logo=vite&logoColor=white)
 ![Platform](https://img.shields.io/badge/platform-Windows-0078D4?logo=windows&logoColor=white)
 
-<img src="docs/week.png" alt="Calendar Desk week view: colour-coded events, ticked-off events struck through, and day summaries along the bottom" width="900">
+<img src="docs/week.png" alt="Calendar Desk week view: yellow upcoming events, red overdue events, green ticked-off events, and day summaries along the bottom" width="900">
 
 </div>
 
@@ -24,20 +24,20 @@ See your week or your whole quarter at a glance, drag events into place, tick th
 |---|---|
 | 🗓️ **Week and quarter views** | A time grid for the current week, or three months side by side. Switch with `W` / `Q`. |
 | 🖱️ **Drag to plan** | Click or drag on empty space to create an event. Drag an event to move it, or drag its bottom edge to change its length. |
-| ✅ **Done / not done** | Every event has a round tick. Click it to mark the event done: it's struck through and faded everywhere it appears. |
-| 🎨 **Colour coding** | Pick from Google Calendar's 11 colours. They sync both ways with Google Calendar on the web and on your phone. |
+| ✅ **Done / not done** | Every event has a round tick. Click it to mark the event done: it turns green and is struck through everywhere it appears. |
+| 🚦 **Status colours** | 🟡 **Yellow**: coming up or in progress · 🔴 **Red**: its end time has passed and it isn't ticked · 🟢 **Green**: done. Events turn red the minute they end, with no refresh needed. |
 | 📝 **Private day summaries** | Write a note for any day. It autosaves to a JSON file on your PC and is **never** sent to Google. |
 | 🔐 **Stays signed in, safely** | OAuth with PKCE in the main process. Tokens are encrypted with Windows DPAPI. |
 | 🌗 **Light and dark** | Follows your Windows theme, including the custom title bar. |
 
 <table>
   <tr>
-    <td><img src="docs/editor.png" alt="Event editor with done checkbox and colour picker"></td>
-    <td><img src="docs/quarter.png" alt="Quarter view: three months with colour bars per day"></td>
+    <td><img src="docs/editor.png" alt="Event editor with a Done checkbox"></td>
+    <td><img src="docs/quarter.png" alt="Quarter view: three months with a status-coloured bar per event"></td>
   </tr>
   <tr>
-    <td align="center"><sub>Editor: done checkbox and colour picker</sub></td>
-    <td align="center"><sub>Quarter view: done events fade, folded corners mark days with a summary</sub></td>
+    <td align="center"><sub>Editor: title, times, Done checkbox, location and notes</sub></td>
+    <td align="center"><sub>Quarter view: a status-coloured bar per event, folded corners mark days with a summary</sub></td>
   </tr>
 </table>
 
@@ -91,7 +91,7 @@ This produces `dist/Calendar Desk Setup 0.1.0.exe` (NSIS, x64). Run it on Window
 | Create an event | **New event**, the **+** in a day header, a click or drag on empty grid space, or a click on the all-day row |
 | Edit an event | Click it. Drag it to move, drag its bottom edge to resize |
 | Mark done | Click the round tick on the event, or use **Done** in the editor |
-| Change colour | Pick a swatch under **Colour** in the editor |
+| Read the colours | Yellow is upcoming, red is overdue, green is done. Hover an event to see its status |
 | Open a day | Click a day's name in the week view, or any day in the quarter view |
 | Close the side panel | `Esc` |
 | Sign out | Avatar at the top right. This also revokes the app's access at Google |
@@ -100,7 +100,8 @@ This produces `dist/Calendar Desk Setup 0.1.0.exe` (NSIS, x64). Run it on Window
 
 | What | Where | Leaves your PC? |
 |---|---|---|
-| Events, colours | Your primary Google Calendar | Yes, it's Google Calendar |
+| Events | Your primary Google Calendar | Yes, it's Google Calendar |
+| Status colours | Worked out live in the app from the clock and the tick. Nothing is stored, and colours set in Google Calendar are left untouched | No |
 | Done ticks | A private property on each event, only readable by this app | Yes, so ticks follow you to other PCs |
 | Day summaries | `%APPDATA%\calendar-desk\day-notes.json` | **No, never** |
 | Sign-in tokens | `%APPDATA%\calendar-desk\google-auth.bin`, encrypted with DPAPI | No |
@@ -116,14 +117,14 @@ src/
   main/
     index.ts      window, custom title bar, IPC handlers, lifecycle
     auth.ts       OAuth loopback + PKCE, encrypted token store, sign-out/revoke
-    calendar.ts   list (paginated) / insert / patch / delete, done flag, colours
+    calendar.ts   list (paginated) / insert / patch / delete, done flag
     notes.ts      local day summaries: atomic JSON writes, no network
   preload/
     index.ts      contextBridge → window.api (typed in shared/types.ts)
   renderer/src/
     App.tsx       auth, view mode and navigation, data loading, side-panel state
     components/   SignIn, TopBar, WeekGrid, QuarterGrid, DayPanel, EventEditor, DoneCheck
-    lib/          date helpers, event grouping, Google colour palette
+    lib/          date helpers, event grouping, status colours, live clock
   shared/
     types.ts      CalendarEvent, EventInput, the Api contract
 ```
