@@ -1,6 +1,6 @@
 <div align="center">
 
-# 📅 Calendar Desk
+# Calendar Desk
 
 **Your Google Calendar on your Windows desktop: fast, keyboard-friendly, and yours.**
 
@@ -18,17 +18,17 @@ See your week or your whole quarter at a glance, drag events into place, tick th
 
 ---
 
-## ✨ Features
+## Features
 
 | | |
 |---|---|
-| 🗓️ **Week and quarter views** | A time grid for the current week, or three months side by side. Switch with `W` / `Q`. |
-| 🖱️ **Drag to plan** | Click or drag on empty space to create an event. Drag an event to move it, or drag its bottom edge to change its length. |
-| ✅ **Done / not done** | Every event has a round tick. Click it to mark the event done: it turns green and is struck through everywhere it appears. |
-| 🚦 **Status colours** | 🟡 **Yellow**: coming up or in progress · 🔴 **Red**: its end time has passed and it isn't ticked · 🟢 **Green**: done. Events turn red the minute they end, with no refresh needed. |
-| 📝 **Private day summaries** | Write a note for any day. It autosaves to a JSON file on your PC and is **never** sent to Google. |
-| 🔐 **Stays signed in, safely** | OAuth with PKCE in the main process. Tokens are encrypted with Windows DPAPI. |
-| 🌗 **Light and dark** | Follows your Windows theme, including the custom title bar. |
+| **Week and quarter views** | A time grid for the current week, or three months side by side. Switch with `W` / `Q`. |
+| **Drag to plan** | Click or drag on empty space to create an event. Drag an event to move it, or drag its bottom edge to change its length. |
+| **Done / not done** | Every event has a round tick. Click it to mark the event done: it turns green and is struck through everywhere it appears. |
+| **Status colours** | 🟡 **Yellow**: coming up or in progress · 🔴 **Red**: its end time has passed and it isn't ticked · 🟢 **Green**: done. Events turn red the minute they end, with no refresh needed. |
+| **Private day summaries** | Write a note for any day. It autosaves to a JSON file on your PC and is **never** sent to Google. |
+| **Stays signed in, safely** | OAuth with PKCE in the main process. Tokens are encrypted with Windows DPAPI. |
+| **Light and dark** | Follows your Windows theme, including the custom title bar. |
 
 <table>
   <tr>
@@ -41,7 +41,7 @@ See your week or your whole quarter at a glance, drag events into place, tick th
   </tr>
 </table>
 
-## 🚀 Getting started
+## Getting started
 
 ### 1. Create a Google OAuth client (once, about five minutes)
 
@@ -108,7 +108,7 @@ This produces `dist/Calendar Desk Setup 0.1.0.exe` (NSIS, x64). Run it on Window
 
 Summaries autosave about a second after you stop typing. Click **Show file** in the day panel to find the file, and back it up like any other file. Clearing a summary removes that day's entry.
 
-## 🧱 How it's built
+## How it's built
 
 Electron + React + TypeScript, bundled with [electron-vite](https://electron-vite.org/). The renderer is sandboxed with a strict CSP and talks to the main process only through a small typed bridge.
 
@@ -136,7 +136,7 @@ src/
 | `npm run build` | Production bundle into `out/` |
 | `npm run build:win` | Typecheck, build and package the Windows installer |
 
-## 🔧 Extending it
+## Extending it
 
 - **Other calendars**: change `CALENDAR_ID` in `src/main/calendar.ts`. To offer a calendar picker, add the `https://www.googleapis.com/auth/calendar.calendarlist.readonly` scope in `auth.ts` and call `calendarList.list`.
 - **Summaries elsewhere**: `src/main/notes.ts` is the only code that touches the summaries file. Swap its read and write functions to use SQLite or an encrypted store, with no UI changes.
