@@ -72,13 +72,20 @@ npm run dev              # starts the app with hot reload
 
 On first launch your browser opens for Google sign-in, then hands you back to the app.
 
-### 3. Build the Windows installer
+### 3. Build the Windows app
 
 ```bash
 npm run build:win
 ```
 
-This produces `dist/Calendar Desk Setup 0.1.0.exe` (NSIS, x64). Run it on Windows: electron-builder can't build an NSIS installer on Linux or macOS without Wine.
+This produces two files in `dist/` (both x64):
+
+| File | What it is |
+|---|---|
+| `Calendar Desk Setup 0.1.0.exe` | An installer. Adds Calendar Desk to the Start menu and to *Installed apps* so you can uninstall it. |
+| `Calendar Desk 0.1.0 Portable.exe` | A single file that runs without installing. Keep it anywhere, such as the desktop or a USB stick. It starts a little slower because it unpacks itself on each launch. |
+
+Both use the same sign-in and summaries, so you can switch between them. Build on Windows: electron-builder can't build these on Linux or macOS without Wine.
 
 > [!NOTE]
 > The client ID and secret from `.env` are compiled into the build, so keep your installers private if that matters to you. Google treats desktop-app secrets as non-confidential anyway.
