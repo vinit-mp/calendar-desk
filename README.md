@@ -27,6 +27,7 @@ See your week or your whole quarter at a glance, drag events into place, tick th
 | **Done / not done** | Every event has a round tick. Click it to mark the event done: it turns green and is struck through everywhere it appears. |
 | **Status colours** | 🟡 **Yellow**: coming up or in progress · 🔴 **Red**: its end time has passed and it isn't ticked · 🟢 **Green**: done. Events turn red the minute they end, with no refresh needed. |
 | **Private day summaries** | Write a note for any day. It autosaves to a JSON file on your PC and is **never** sent to Google. |
+| **Note formatting** | Day summaries and event notes have a small formatter: headings, bullet points, and bullets you can strike through as you finish them. |
 | **Stays signed in, safely** | OAuth with PKCE in the main process. Tokens are encrypted with Windows DPAPI. |
 | **Light and dark** | Follows your Windows theme, including the custom title bar. |
 
@@ -93,6 +94,8 @@ This produces `dist/Calendar Desk Setup 0.1.0.exe` (NSIS, x64). Run it on Window
 | Mark done | Click the round tick on the event, or use **Done** in the editor |
 | Read the colours | Yellow is upcoming, red is overdue, green is done. Hover an event to see its status |
 | Open a day | Click a day's name in the week view, or any day in the quarter view |
+| Format a note | Type `#` then space for a heading, or `-` then space for a bullet. You can also use the **H** and bullet buttons. `Enter` on an empty bullet ends the list |
+| Strike a bullet | Click its dot, press `Ctrl+Enter`, or use the **S** button |
 | Close the side panel | `Esc` |
 | Sign out | Avatar at the top right. This also revokes the app's access at Google |
 
@@ -123,7 +126,7 @@ src/
     index.ts      contextBridge → window.api (typed in shared/types.ts)
   renderer/src/
     App.tsx       auth, view mode and navigation, data loading, side-panel state
-    components/   SignIn, TopBar, WeekGrid, QuarterGrid, DayPanel, EventEditor, DoneCheck
+    components/   SignIn, TopBar, WeekGrid, QuarterGrid, DayPanel, EventEditor, DoneCheck, NoteEditor
     lib/          date helpers, event grouping, status colours, live clock
   shared/
     types.ts      CalendarEvent, EventInput, the Api contract

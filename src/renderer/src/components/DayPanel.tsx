@@ -4,6 +4,7 @@ import { dateKey, fmtDayLong, fmtEventTime, fmtSavedAt, isSameDay } from '../lib
 import { eventStatus, statusColor } from '../lib/colors'
 import { useNow } from '../lib/useNow'
 import DoneCheck from './DoneCheck'
+import NoteEditor from './NoteEditor'
 
 interface Props {
   day: Date
@@ -95,14 +96,13 @@ export default function DayPanel({ day, events, note, onSaveNote, onSelect, onTo
 
       <section className="panel__summary">
         <label htmlFor="day-summary">Summary</label>
-        <textarea
+        <NoteEditor
           id="day-summary"
+          className="note--summary"
           value={text}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={onChange}
           onBlur={() => void flush()}
-          placeholder="Write a summary for this day."
-          rows={8}
-          spellCheck
+          placeholder="Write a summary for this day. Type # for a heading, - for a bullet."
         />
         <p className="panel__status">
           <span aria-live="polite">{statusText}</span>

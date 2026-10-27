@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import type { CalendarEvent, EventInput } from '../../../shared/types'
 import { addDays, dateKey, fromLocalInput, parseDateKey, toLocalInput } from '../lib/dates'
+import NoteEditor from './NoteEditor'
 
 export type EditorState = { mode: 'create'; draft: EventInput } | { mode: 'edit'; event: CalendarEvent }
 
@@ -171,7 +172,7 @@ export default function EventEditor({ state, busy, onClose, onSave, onDelete, on
         </div>
         <div className="field">
           <label htmlFor="ev-notes">Notes</label>
-          <textarea id="ev-notes" rows={5} value={form.description} onChange={(e) => patch({ description: e.target.value })} disabled={busy} placeholder="Optional" />
+          <NoteEditor id="ev-notes" className="note--event" value={form.description} onChange={(description) => patch({ description })} disabled={busy} placeholder="Optional" />
         </div>
 
         {problem && (

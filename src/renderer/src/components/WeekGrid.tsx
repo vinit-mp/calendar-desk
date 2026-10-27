@@ -4,6 +4,7 @@ import { addDays, dateKey, fmtDayName, fmtTime, isSameDay, startOfDay } from '..
 import { STATUS_LABEL, eventStatus, statusColor } from '../lib/colors'
 import { useNow } from '../lib/useNow'
 import DoneCheck from './DoneCheck'
+import NotePreview from './NotePreview'
 
 export const HOUR_PX = 48
 const SNAP = 15
@@ -401,7 +402,7 @@ export default function WeekGrid({ weekStart, events, notes, loading, selectedId
           const note = notes[key]
           return (
             <button key={key} type="button" className={`day__note${note ? ' has-note' : ''}${isSameDay(day, now) ? ' is-today' : ''}`} onClick={() => onOpenDay(day)} title={note ? 'Open summary' : 'Add a summary for this day'}>
-              <span>{note ? note.text : 'Add summary'}</span>
+              <span>{note ? <NotePreview text={note.text} /> : 'Add summary'}</span>
             </button>
           )
         })}

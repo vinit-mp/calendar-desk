@@ -679,7 +679,7 @@ textarea {
   cursor: pointer;
   min-width: 0;
 }
-.day__note span {
+.day__note > span {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -687,7 +687,11 @@ textarea {
   white-space: pre-line;
   opacity: 0;
 }
-.day__note.has-note span {
+.day__note .is-struck {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+.day__note.has-note > span {
   opacity: 1;
 }
 .day__note.has-note {
@@ -697,8 +701,8 @@ textarea {
 .day__note.is-today {
   background: var(--today);
 }
-.day__note:hover span,
-.day__note:focus-visible span {
+.day__note:hover > span,
+.day__note:focus-visible > span {
   opacity: 1;
 }
 .day__note:hover {
@@ -883,21 +887,129 @@ textarea {
   font-size: 12.5px;
   color: var(--muted);
 }
-.panel__summary textarea {
-  width: 100%;
-  min-height: 200px;
-  resize: vertical;
+/* ---------- note formatter (day summary, event notes) ---------- */
+
+.note {
+  display: flex;
+  flex-direction: column;
   border: 1px solid var(--line);
   border-radius: 6px;
   background: var(--field);
-  padding: 10px 12px;
+}
+.note:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+.note.is-disabled {
+  opacity: 0.6;
+}
+.note__toolbar {
+  display: flex;
+  gap: 2px;
+  padding: 4px;
+  border-bottom: 1px solid var(--line);
+}
+.note__tool {
+  min-width: 30px;
+  height: 26px;
+  padding: 0 7px;
+  display: inline-grid;
+  place-items: center;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+.note__tool:not(:disabled):hover {
+  background: var(--hover);
+  color: var(--ink);
+}
+.note__tool:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.note__tool.is-on {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  color: var(--accent);
+}
+.note__tool-h {
+  font: 700 14px/1 var(--font-display);
+}
+.note__tool-s {
+  font: 600 14px/1 var(--font);
+  text-decoration: line-through;
+}
+.note__body {
+  flex: 1;
+  padding: 8px 12px 10px;
+  cursor: text;
+}
+.note--summary .note__body {
+  min-height: 200px;
+}
+.note--event .note__body {
+  min-height: 90px;
+}
+.note__row {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+}
+.note__line {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 1px 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  resize: none;
+  overflow: hidden;
+  field-sizing: content;
   font-size: 14px;
   line-height: 1.55;
 }
-.panel__summary textarea:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+.note__line::placeholder {
+  color: var(--muted);
+  opacity: 0.8;
+}
+.note__row--heading .note__line {
+  font: 600 16px/1.4 var(--font-display);
+  letter-spacing: -0.01em;
+  padding-top: 6px;
+}
+.note__row--heading:first-child .note__line {
+  padding-top: 1px;
+}
+.note__mark {
+  flex: none;
+  width: 18px;
+  height: 23px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+}
+.note__mark:hover {
+  background: var(--hover);
+}
+.note__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.note__row--bullet.is-done .note__mark {
+  color: var(--status-done);
+}
+.note__row--bullet.is-done .note__line {
+  text-decoration: line-through;
+  color: var(--muted);
 }
 .panel__status {
   margin: 0;
@@ -1085,8 +1197,9 @@ textarea {
   font-size: 12.5px;
   color: var(--muted);
 }
-.field input,
-.field textarea {
+/* Direct children only, so the note editor's own lines keep their styling. */
+.field > input,
+.field > textarea {
   width: 100%;
   border: 1px solid var(--line);
   border-radius: 6px;
@@ -1095,13 +1208,13 @@ textarea {
   font-size: 14px;
   font-variant-numeric: tabular-nums;
 }
-.field textarea {
+.field > textarea {
   resize: vertical;
   min-height: 90px;
   line-height: 1.5;
 }
-.field input:focus,
-.field textarea:focus {
+.field > input:focus,
+.field > textarea:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
